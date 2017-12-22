@@ -52,40 +52,30 @@ export default class Calendar extends React.PureComponent {
 
     createClassObjects () {
       let classObjects = this.props.schedule.map((classObject, i) => (
-          <div key={i} className={'classDetails ' + 'column ' + 'is-half-tablet ' + 'is-one-third-widescreen ' + 'is-one-quarter-fullhd '}>
+          <div key={i} className={'classDetails column is-half-tablet is-one-third-widescreen is-one-quarter-fullhd'}>
               <div className='box'>
                 <div className='media'>
-                  <div className='media-left'>
-                    06
-                    <br/>
-                    30
-                  </div>
-
                   <div className='media-content'>
-                    <ul className=''>
+                    <ul>
 
-                        <li className='cTitle'>
-                            <strong>{classObject['class']}</strong>
+                        <li>
+                            <strong>{classObject['class']} </strong><small>{classObject['difficulty']}</small>
                         </li>
 
                         <li>
-                            <small>{classObject['difficulty']}</small>
+                            <small>{classObject['instructor']}</small>
                         </li>
 
-                        <li className='cInstructor'>
-                            {classObject['instructor']}
+                        <li>
+                            <small>{this.formatClassRoom(classObject['room'])}</small>
                         </li>
 
-                        <li className='cRoom'>
-                            {this.formatClassRoom(classObject['room'])}
+                        <li>
+                            <small>{this.getDisplayTime(classObject['startTime'], classObject['endTime'])}</small>
                         </li>
 
-                        <li className='cTime'>
-                            {this.getDisplayTime(classObject['startTime'], classObject['endTime'])}
-                        </li>
-
-                        <li className='cDateRange'>
-                            {classObject['dateRange']}
+                        <li>
+                            <small>{classObject['dateRange']}</small>
                         </li>
 
                     </ul>
@@ -128,6 +118,10 @@ export default class Calendar extends React.PureComponent {
           }
         };
 
+        const paddingOverride = {
+          'padding': '1rem 1rem'
+        };
+
         let scheduleItems;
         if (this.props.schedule.length === 0) {
           scheduleItems = this.allClassesCancelled();
@@ -135,10 +129,10 @@ export default class Calendar extends React.PureComponent {
           scheduleItems = this.createClassObjects();
         }
 
-        let calendarClass = this.state.calendarIsHidden ? 'calendarHidden' : '';
+        let calendarClass = this.state.calendarIsHidden ? 'calendarHidden' : 'calendarVisible';
 
         return (
-          <div className='section'>
+          <div className='section' style={paddingOverride}>
             <div className='container is-fluid'>
               <Navigation
                 dateString={this.props.dateString}
@@ -152,10 +146,11 @@ export default class Calendar extends React.PureComponent {
                   month={this.state.selectedDay}
                   onDayClick={this.handleDayClick}
                   selectedDays={this.state.selectedDay}
+                  className='centerCalendar'
                 />
               </div>
 
-              <div className={'columns ' + 'is-multiline ' + 'is-variable ' + 'is-1'}>
+              <div className={'columns is-multiline is-variable is-1'}>
                 {scheduleItems}
               </div>
             </div>

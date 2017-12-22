@@ -1,3 +1,11 @@
 .calendarHidden {
     display: none;
 }
+
+.calendarVisible {
+    display: flex;
+}
+
+.centerCalendar {
+  margin: 0 auto 0 auto;
+}

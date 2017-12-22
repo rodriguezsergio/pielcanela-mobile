@@ -15,7 +15,7 @@ export default function renderFullPage(html, schedule, dateString) {
             window.schedule = ${JSON.stringify(schedule).replace(/</g, '\\u003c')}
             window.dateString = ${JSON.stringify(dateString).replace(/</g, '\\u003c')}
             </script>
-            <script src="/client.js"></script>
+            <script src="/assets/client.js"></script>
         </body>
         </html>
     `;

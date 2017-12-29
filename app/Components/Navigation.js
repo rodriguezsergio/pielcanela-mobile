@@ -5,9 +5,6 @@ export default class Navigation extends React.PureComponent {
 
     constructor (props) {
       super(props);
-      this.state = {
-        selectedDay: undefined,
-      };
     }
 
     getDateLink (addOrSubtract) {
@@ -15,10 +12,6 @@ export default class Navigation extends React.PureComponent {
         return '/date/' + moment(this.props.dateString).add(1,'d').format('YYYY-MM-DD');
       }
       return '/date/' + moment(this.props.dateString).subtract(1,'d').format('YYYY-MM-DD');
-    }
-
-    handleDayClick = (day) => {
-      this.setState({ selectedDay: day });
     }
 
     render () {

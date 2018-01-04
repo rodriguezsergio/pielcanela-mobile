@@ -1,11 +1,24 @@
-.calendarHidden {
-    display: none;
+.hidden {
+  display: none;
 }
 
-.calendarVisible {
-    display: flex;
+.visible {
+  display: flex;
 }
 
-.centerCalendar {
+.centerElement {
   margin: 0 auto 0 auto;
+}
+
+.box > .media > ul {
+  width: 100%;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.topBottomMargins {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }

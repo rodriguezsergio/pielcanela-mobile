@@ -1,5 +1,6 @@
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var webpack = require('webpack');
 
 var hash = '-[hash]';
 
@@ -12,6 +13,7 @@ var plugins = [
 	new CopyWebpackPlugin([
 		{ from: 'app.js' }
 	]),
+	new webpack.EnvironmentPlugin(['CLIENT_ID'])
 ];
 
 var modules =

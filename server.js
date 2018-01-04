@@ -5,7 +5,6 @@ import { execSync } from 'child_process';
 import bodyParser from 'body-parser';
 
 import pielcanela from './app/server';
-import api from './app/server/api';
 
 export default function createApp (dirname) {
 	console.log('starting app');
@@ -27,6 +26,5 @@ export default function createApp (dirname) {
 	app.get('/', pielcanela());
 	app.get('/date/:date', pielcanela());
 
-	app.get('/api', api());
 	return app;
 }

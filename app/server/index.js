@@ -15,12 +15,12 @@ function rethrowIfNotOk (r) {
 	return r;
 }
 
-function getOpeningTime () {
+function getOpeningTime (epochTime) {
     // Sunday 1:30pm
     // Weekdays 6:30pm
     // Saturday 12:00pm
 
-    let date = moment();
+    let date = moment.unix(epochTime);
     date.set('second', 0);
     date.set('millisecond', 0);
 
@@ -104,9 +104,6 @@ export default () => (req, res) => {
     let dateString = `${year}-${month + 1}-${day}`;
     let epochTime = new Date(year,month,day).getTime() / 1000;
 
-    console.log('dateString', dateString);
-    console.log('epochTime', epochTime);
-
     // Oct 29, 2017 should return 1,509,249,600
     // Nov 26, 2017 should return 1,511,672,400
     if (typeof req.params.date !== 'undefined') {
@@ -121,6 +118,9 @@ export default () => (req, res) => {
             console.log('[INFO] Not a valid date.');
         }
     }
+
+    console.log('dateString', dateString);
+    console.log('epochTime', epochTime);
 
     let url = 'http://www.pielcaneladancers.com/classschedule/print?date=' + epochTime;
 
@@ -165,20 +165,30 @@ export default () => (req, res) => {
                 o['offset'] = 30 * offset;
                 o['duration'] = 30 * parseInt($(this).attr('colspan'), 10);
 
-                let forStartTime = getOpeningTime();
-                o['startTime'] = forStartTime.add(o['offset'], 'm');
+                let startTime = getOpeningTime(epochTime).add(o['offset'], 'm');
+                let endTime = getOpeningTime(epochTime).add((o['offset'] + o['duration']), 'm');
+                o['iso8601'] = moment(startTime).format();
 
-                let startClone = moment(o['startTime']).format();
-                o['iso8601'] = startClone;
+                // date-related keys for event creation
+                let startDay = o['dateRange'].split('-')[0].trim();
+                let startHour = startTime.hour();
+                let startMinute = startTime.minute();
 
-                let forEndTime = getOpeningTime();
-                o['endTime'] = forEndTime.add((o['offset'] + o['duration']), 'm');
+                let endDay = o['dateRange'].split('-')[1].trim();
+                let endHour = endTime.hour();
+                let endMinute = endTime.minute();
+
+                o['firstDayStart'] = moment(startDay, 'MMM DD, YYYY').set('hour', startHour).set('minute', startMinute);
+                o['firstDayEnd'] = moment(startDay, 'MMM DD, YYYY').set('hour', endHour).set('minute', endMinute);
+
+                // recurrence 'until' date
+                o['endDate'] = moment(endDay, 'MMM DD, YYYY');
 
                 results.push(o);
 			});
 
             let sortedList = results.sort(function (a,b) {
-                return a.startTime.format('X') - b.startTime.format('X');
+                return a.firstDayStart.format('HHmm') - b.firstDayStart.format('HHmm');
             });
 
             groupByTime(sortedList);

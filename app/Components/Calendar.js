@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
@@ -73,11 +73,11 @@ export default class Calendar extends React.PureComponent {
         'description': `${classObject['class']} ${classObject['difficulty']} ${classObject['instructor']}` +
           '\nCreated by the mobile-friendly Piel Canela web page (unaffiliated).',
         'start': {
-          'dateTime': moment(classObject['firstDayStart']).format(),
+          'dateTime': moment(classObject['firstDayStart']).tz('America/New_York').format(),
           'timeZone': 'America/New_York'
         },
         'end': {
-          'dateTime': moment(classObject['firstDayEnd']).format(),
+          'dateTime': moment(classObject['firstDayEnd']).tz('America/New_York').format(),
           'timeZone': 'America/New_York'
         },
         'recurrence': [
@@ -123,8 +123,8 @@ export default class Calendar extends React.PureComponent {
     }
 
     getDisplayTime (start, end) {
-        let startFormatted = moment(start).format('h:mm');
-        let endFormatted = moment(end).format(' - h:mm A');
+        let startFormatted = moment(start).tz('America/New_York').format('h:mm');
+        let endFormatted = moment(end).tz('America/New_York').format(' - h:mm A');
 
         return startFormatted + endFormatted;
     }

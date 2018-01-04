@@ -5,7 +5,7 @@ import { StaticRouter } from 'react-router';
 import renderFullPage from './renderFullPage';
 import fetch from 'node-fetch';
 import cheerio from 'cheerio';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Calendar from '../Components/Calendar';
 
 function rethrowIfNotOk (r) {
@@ -20,7 +20,8 @@ function getOpeningTime (epochTime) {
     // Weekdays 6:30pm
     // Saturday 12:00pm
 
-    let date = moment.unix(epochTime);
+    let date = moment.unix(epochTime).tz('America/New_York');
+
     date.set('second', 0);
     date.set('millisecond', 0);
 
@@ -109,10 +110,8 @@ export default () => (req, res) => {
     if (typeof req.params.date !== 'undefined') {
         if (req.params.date.length === 10) {
             if (moment(req.params.date, 'YYYY-MM-DD').isValid() === true) {
-                let timezoneOffset = new Date().getTimezoneOffset() / 60;
                 dateString = req.params.date;
-
-                epochTime = moment(`${req.params.date} 00-0${timezoneOffset}00`).format('X');
+                epochTime = moment.tz(req.params.date, 'America/New_York').format('X');
             }
         } else {
             console.log('[INFO] Not a valid date.');
@@ -178,8 +177,8 @@ export default () => (req, res) => {
                 let endHour = endTime.hour();
                 let endMinute = endTime.minute();
 
-                o['firstDayStart'] = moment(startDay, 'MMM DD, YYYY').set('hour', startHour).set('minute', startMinute);
-                o['firstDayEnd'] = moment(startDay, 'MMM DD, YYYY').set('hour', endHour).set('minute', endMinute);
+                o['firstDayStart'] = moment(startDay, 'MMM DD, YYYY').tz('America/New_York').set('hour', startHour).set('minute', startMinute).format();
+                o['firstDayEnd'] = moment(startDay, 'MMM DD, YYYY').tz('America/New_York').set('hour', endHour).set('minute', endMinute).format();
 
                 // recurrence 'until' date
                 o['endDate'] = moment(endDay, 'MMM DD, YYYY');
@@ -188,7 +187,7 @@ export default () => (req, res) => {
 			});
 
             let sortedList = results.sort(function (a,b) {
-                return a.firstDayStart.format('HHmm') - b.firstDayStart.format('HHmm');
+                return moment(a.firstDayStart).tz('America/New_York').format('HHmm') - moment(b.firstDayStart).tz('America/New_York').format('HHmm');
             });
 
             groupByTime(sortedList);

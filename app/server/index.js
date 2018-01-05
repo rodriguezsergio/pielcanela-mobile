@@ -15,30 +15,16 @@ function rethrowIfNotOk (r) {
 	return r;
 }
 
-function getOpeningTime (epochTime) {
-    // Sunday 1:30pm
-    // Weekdays 6:30pm
-    // Saturday 12:00pm
-
+function getOpeningTime (epochTime, $) {
     let date = moment.unix(epochTime).tz('America/New_York');
 
-    date.set('second', 0);
-    date.set('millisecond', 0);
+    let time = $('.Time_left').first().text();
+    let ampm = $('.AM_PM').first().text();
+    let hour = moment(time+ampm,'h:mmA').hour();
+    let minute = moment(time+ampm,'h:mmA').minute();
 
-    switch (date.get('day')) {
-        case 0:
-            date.set('hour', 13);
-            date.set('minute', 30);
-            return date;
-        case 6:
-            date.set('hour', 12);
-            date.set('minute', 0);
-            return date;
-        default:
-            date.set('hour', 18);
-            date.set('minute', 30);
-            return date;
-	}
+    date.set('hour', hour).set('minute', minute);
+    return date;
 }
 
 function groupByTime (classes) {
@@ -164,8 +150,8 @@ export default () => (req, res) => {
                 o['offset'] = 30 * offset;
                 o['duration'] = 30 * parseInt($(this).attr('colspan'), 10);
 
-                let startTime = getOpeningTime(epochTime).add(o['offset'], 'm');
-                let endTime = getOpeningTime(epochTime).add((o['offset'] + o['duration']), 'm');
+                let startTime = getOpeningTime(epochTime, $).add(o['offset'], 'm');
+                let endTime = getOpeningTime(epochTime, $).add((o['offset'] + o['duration']), 'm');
                 o['iso8601'] = moment(startTime).format();
 
                 // date-related keys for event creation

@@ -67,6 +67,18 @@ export default class Calendar extends React.PureComponent {
     createEvent = (classObject) => {
       let endDate = moment(classObject['endDate']).add(2, 'd').format('YYYYMMDD');
 
+      let dayNumToString = {
+        0: 'SU',
+        1: 'MO',
+        2: 'TU',
+        3: 'WE',
+        4: 'TH',
+        5: 'FR',
+        6: 'SA'
+      };
+
+      let dayToRepeatOn = dayNumToString[moment(classObject['firstDayStart']).day()];
+
       var calendarEvent = {
         'summary': `${classObject['class']} ${classObject['difficulty']}`,
         'location': 'Piel Canela New York Latin Dance and Music School, 500 8th Ave, New York, NY 10018, USA',
@@ -81,7 +93,7 @@ export default class Calendar extends React.PureComponent {
           'timeZone': 'America/New_York'
         },
         'recurrence': [
-          `RRULE:FREQ=WEEKLY;UNTIL=${endDate}`
+          `RRULE:FREQ=WEEKLY;UNTIL=${endDate};BYDAY=${dayToRepeatOn}`
         ],
         'reminders': {
           'useDefault': true

@@ -83,16 +83,10 @@ export default () => (req, res) => {
     let results = [];
 
     // build URL
-    let date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth();
-    let year = date.getFullYear();
-
-    let dateString = `${year}-${month + 1}-${day}`;
-    let epochTime = new Date(year,month,day).getTime() / 1000;
+    let dateString = moment().format('YYYY-MM-DD');
+    let epochTime = moment(dateString).tz('America/New_York').unix();
 
     // Oct 29, 2017 should return 1,509,249,600
-    // Nov 26, 2017 should return 1,511,672,400
     if (typeof req.params.date !== 'undefined') {
         if (req.params.date.length === 10) {
             if (moment(req.params.date, 'YYYY-MM-DD').isValid() === true) {

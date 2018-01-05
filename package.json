@@ -10,8 +10,12 @@
     "webpack-version": "webpack --help",
     "postinstall": "webpack"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rodriguezsergio/pielcanela-mobile.git"
+  },
+  "author": "Sergio Rodriguez",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.15.2",
     "cheerio": "^1.0.0-rc.2",

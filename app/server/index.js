@@ -157,8 +157,8 @@ export default () => (req, res) => {
                 let endHour = endTime.hour();
                 let endMinute = endTime.minute();
 
-                o['firstDayStart'] = moment(startDay, 'MMM DD, YYYY').tz('America/New_York').set('hour', startHour).set('minute', startMinute).format();
-                o['firstDayEnd'] = moment(startDay, 'MMM DD, YYYY').tz('America/New_York').set('hour', endHour).set('minute', endMinute).format();
+                o['firstDayStart'] = moment.tz(startDay, 'MMM DD, YYYY', 'America/New_York').set('hour', startHour).set('minute', startMinute).format();
+                o['firstDayEnd'] = moment.tz(startDay, 'MMM DD, YYYY', 'America/New_York').set('hour', endHour).set('minute', endMinute).format();
 
                 // recurrence 'until' date
                 o['endDate'] = moment(endDay, 'MMM DD, YYYY');

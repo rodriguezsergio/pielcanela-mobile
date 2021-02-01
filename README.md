@@ -1,3 +1,8 @@
+# Archived Code
+
+### Feb 1 2021 Update
+Because of COVID-19, the source website this small application relied upon is no longer available.
+
 Piel Canela Mobile Calendar
 ===========================
 
